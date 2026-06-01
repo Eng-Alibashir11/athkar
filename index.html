@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>أذكار الصباح والمساء - حفظ سحابي تفاعلي</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Tahoma', 'Traditional Arabic', 'Arial', sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #e8f0e8 0%, #d4e0d4 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #fffdf7;
+            border-radius: 48px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            padding: 20px 24px 32px;
+            border: 1px solid #c0cfb5;
+        }
+        h1 {
+            text-align: center;
+            font-size: 1.9rem;
+            color: #2c5f2d;
+            margin-top: 0;
+            margin-bottom: 8px;
+            border-bottom: 3px solid #b9d8b3;
+            display: inline-block;
+            width: auto;
+            padding-bottom: 10px;
+        }
+        .title-div {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0 25px;
+            flex-wrap: wrap;
+        }
+        .main-btn {
+            border: none;
+            padding: 12px 32px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 60px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            background: #9e9e9e;
+            box-shadow: 0 5px 0 #5e5e5e;
+        }
+        .main-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #5e5e5e;
+        }
+        .main-btn.sabah-active {
+            background: #2c5f2d;
+            box-shadow: 0 5px 0 #1a3b1a;
+        }
+        .main-btn.masaa-active {
+            background: #8b5a2b;
+            box-shadow: 0 5px 0 #5e3e1d;
+        }
+        .main-btn.sabah-inactive {
+            background: #7d9e6e;
+            box-shadow: 0 5px 0 #537a3e;
+        }
+        .main-btn.masaa-inactive {
+            background: #c6894b;
+            box-shadow: 0 5px 0 #8b5a2b;
+        }
+        .preview-window {
+            background: #fef7e0;
+            border-radius: 32px;
+            padding: 16px;
+            border: 2px solid #d9c48b;
+            max-height: 380px;
+            overflow-y: auto;
+            margin-bottom: 25px;
+            box-shadow: inset 0 0 6px #cfb87c, 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .zekr-item {
+            background: white;
+            border-radius: 20px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+            border-right: 6px solid #97bc62;
+        }
+        .zekr-text {
+            flex: 1;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #2c3e2b;
+            word-break: break-word;
+            white-space: normal;
+            overflow-wrap: break-word;
+        }
+        .zekr-count {
+            background: #e9f5e1;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #2b5e2f;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .check-box {
+            transform: scale(1.1);
+            margin-left: 4px;
+            accent-color: #2c5f2d;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 4px 14px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .delete-btn:active {
+            transform: scale(0.95);
+        }
+        .send-btn {
+            background: #25D366;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            font-family: inherit;
+            box-shadow: 0 6px 0 #1e8a4b;
+        }
+        .send-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #1e8a4b;
+        }
+        .add-section {
+            background: #e6f0e3;
+            border-radius: 36px;
+            padding: 20px;
+            margin-top: 5px;
+            border: 1px solid #bdd8ad;
+        }
+        .add-section h3 {
+            margin-top: 0;
+            text-align: center;
+            color: #1f543f;
+        }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+            margin-bottom: 15px;
+        }
+        .input-group {
+            flex: 1;
+            min-width: 160px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2b532b;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 28px;
+            border: 1px solid #bbb;
+            background: white;
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+        textarea {
+            border-radius: 20px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+        .small-btn {
+            background: #558b2f;
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .note {
+            font-size: 0.75rem;
+            color: #4e6b3c;
+            text-align: center;
+            margin-top: 15px;
+        }
+        .save-alert {
+            background: #d9edf7;
+            color: #31708f;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 10px;
+        }
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 20px;
+            color: #6b5e3a;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1e9cf;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #97bc62;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="title-div">
+        <h1>🌸 أذكار الصباح والمساء 🌸</h1>
+    </div>
+
+    <div class="btn-group">
+        <button class="main-btn" id="btnSabah">🍃 أذكار الصباح</button>
+        <button class="main-btn" id="btnMasaa">🌙 أذكار المساء</button>
+    </div>
+
+    <div class="preview-window" id="previewArea">
+        <p style="text-align:center; color:#8b7a4a;">✨ جاري تحميل الأذكار ومزامنتها سحابياً... ✨</p>
+    </div>
+
+    <button class="send-btn" id="sendWhatsAppBtn">📲 إرسال الأذكار المختارة إلى واتساب</button>
+
+    <div class="add-section">
+        <h3>➕ إضافة ذكر جديد</h3>
+        <div class="flex-row">
+            <div class="input-group" style="flex:2">
+                <label>نص الذكر (بالتشكيل أو دونه)</label>
+                <textarea id="newZekrText" rows="2" placeholder="مثال: سبحان الله وبحمده ..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>عدد المرات</label>
+                <input type="number" id="newCount" value="1" min="1">
+            </div>
+            <div class="input-group">
+                <label>التصنيف</label>
+                <select id="newCategory">
+                    <option value="sabah">أذكار الصباح</option>
+                    <option value="masaa">أذكار المساء</option>
+                </select>
+            </div>
+            <div class="input-group" style="flex:0.5">
+                <button class="small-btn" id="addZekrBtn" style="margin-top:22px;">➕ إضافة</button>
+            </div>
+        </div>
+        <div class="save-alert" id="saveStatus">☁️ يتم حفظ ومزامنة الأذكار مباشرة في قاعدة البيانات السحابية</div>
+        <div class="note">📌 الأذكار التي تضيفها ستبقى محفوظة بشكل دائم على سيرفر Supabase الخاص بك.<br>🗑️ ملاحظة: لا يمكن حذف الأذكار الافتراضية، فقط الأذكار التي أضفتها أنت تظهر بجانبها زر حذف.</div>
+    </div>
+    <footer>📖 {ألا بذكر الله تطمئن القلوب}</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    // ======================= تهيئة اتصال Supabase =======================
+    const SUPABASE_URL = "https://isrlcblnqgdjpauyuwqn.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_oIb4K6PsCH-sDGP2cq1eHQ_l32hUhw7";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ======================= البيانات الأساسية الافتراضية =======================
+    const DEFAULT_SABAH = [
+        { text: "أعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّحِيمِ: {اللهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَّهُ مَا فِي السَّمَوَاتِ وَمَا فِي الْأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَوَاتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ} [البقرة: 255] (مرة واحدة)", count: 1, isDefault: true },
+        { text: "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: {قُلْ هُوَ اللهُ أَحَدٌ * اللهُ الصَّمَدُ * لَمْ يَلِدْ وَلَمْ يُولَدْ * وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ} [الإخلاص: 1-4] (ثلاث مرات)", count: 3, isDefault: true },
+        { text: "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: {قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ * مِن شَرِّ مَا خَلَقَ * وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ * وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ * وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ} [الفلق: 1-5] (ثلاث مرات)", count: 3, isDefault: true },
+        { text: "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: {قُلْ أَعُوذُ بِرَبِّ النَّاسِ * مَلِكِ النَّاسِ * إِلَهِ النَّاسِ * مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ * الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ * مِنَ الْجِنَّةِ وَالنَّاسِ} [الناس: 1-6] (ثلاث مرات)", count: 3, isDefault: true },
+        { text: "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ، وَلَهُ الحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ. (مرة واحدة، أو عشر مرات، أو مائة مرة)", count: 1, isDefault: true },
+        { text: "سُبْحَانَ اللهِ وَبِحَمْدِهِ. (مائة مرة)", count: 100, isDefault: true },
+        { text: "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ العَلِيمُ. (ثلاث مرات)", count: 3, isDefault: true },
+        { text: "رَضِيتُ بِاللهِ رَبًّا، وَبِالإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ نَبِيًّا وَرَسُولًا. (ثلاث مرات)", count: 3, isDefault: true },
+        { text: "حَسْبِيَ اللهُ لَا إِلَهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ العَرْشِ العَظِيم. (سبع مرات)", count: 7, isDefault: true },
+        { text: "أَصْبَحْنَا عَلَى فِطْرَةِ الإِسْلَامِ، وَكَلِمَةِ الإِخْلَاصِ، وَدِينِ نَبِيِّنَا مُحَمَّدٍ، وَمِلَّةِ أَبِينَا إِبْرَاهِيمَ حَنِيفًا مُسْلِمًا وَمَا أَنَا مِنَ المُشْرِكِينَ. (مرة واحدة)", count: 1, isDefault: true },
+        { text: "أَصْبَحْنَا وَأَصْبَحَ المُلْكُ للهِ، وَالحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ، وَلَهُ الحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا اليَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا اليَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الكَسَلِ وَسُوءِ الكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي القَبْرِ. (مرة واحدة)", count: 1, isDefault: true },
+        { text: "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ. (مرة واحدة)", count: 1, isDefault: true },
+        { text: "اللَّهُمَّ إِنِّى أَصْبَحْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ. (أربع مرات)", count: 4, isDefault: true },
+        { text: "اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، لَكَ الحَمْدُ، وَلَكَ الشَّكْرُ. (مرة واحدة)", count: 1, isDefault: true },
+        { text: "يَا حَيُّ يَا قَيُّومُ بِكَ أَسْتَغِيثُ, فَأَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ. (مرة واحدة)", count: 1, isDefault: true },
+        { text: "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الكُفْرِ وَالفَقْرِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ القَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ. (ثلاث مرات)", count: 3, isDefault: true },
+        { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ العَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ العَفْوَ وَالعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي، وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي، وَعَنْ يَمِينِي وَعَنْ شِمَالِي، وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أَغْتَالَ مِنْ تَحْتِي. (مرة واحدة)", count: 1, isDefault: true },
+        { text: "اللَّهُمَّ فَاطِرَ السَّمَاوَاتِ وَالْأَرْضِ، عَالِمَ الغَيْبِ وَالشَّهَادَةِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي وَشَرِّ الشَّيْطَانِ وَشِرْكِهِ (وأن أقترف على نفسي سوءاً، أو أجره إلى مسلم). (مرة واحدة)", count: 1, isDefault: true },
+        { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا. (مرة واحدة)", count: 1, isDefault: true },
+        { text: "اللَّهُمَّ أَنْتَ رَبِّي، لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي، فَاغْفِرْ لِي؛ فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ. (مرة واحدة)", count: 1, isDefault: true }
+    ];
+
+    const DEFAULT_MASAA = [
+        { text: "أعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّحِيمِ: {اللهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَّهُ مَا فِي السَّمَوَاتِ وَمَا فِي الْأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَوَاتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ} [البقرة: 255] (مرة واحدة)", count: 1, isDefault: true },
+        { text: "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: {قُلْ هُوَ اللهُ أَحَدٌ * اللهُ الصَّمَدُ * لَمْ يَلِدْ وَلَمْ يُولَد * وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ} [الإخلاص: 1-4] (ثلاث مرات)", count: 3, isDefault: true },
+        { text: "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: {قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ * مِن شَرِّ مَا خَلَقَ * وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ * وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ * وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ} [الفلق: 1-5] (ثلاث مرات)", count: 3, isDefault: true },
+        { text: "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: {قُلْ أَعُوذُ بِرَبِّ النَّاسِ * مَلِكِ النَّاسِ * إِلَهِ النَّاسِ * مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ * الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ * مِنَ الْجِنَّةِ وَالنَّاسِ} [الناس: 1-6] (ثلاث مرات)", count: 3, isDefault: true },
+        { text: "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ، وَلَهُ الحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ. (مرة واحدة، أو عشر مرات، أو مائة مرة)", count: 1, isDefault: true },
+        { text: "سُبْحَانَ اللهِ وَبِحَمْدِهِ. (مائة مرة)", count: 100, isDefault: true },
+        { text: "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ العَلِيمُ. (ثلاث مرات)", count: 3, isDefault: true },
+        { text: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ. (ثلاث مرات)", count: 3, isDefault: true },
+        { text: "رَضِيتُ بِاللَّهِ رَبًّا، وَبِالإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ نَبِيًّا وَرَسُولًا. (ثلاث مرات)", count: 3, isDefault: true },
+        { text: "حَسْبِيَ اللهُ لَا إِلَهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ العَرْشِ العَظِيمِ. (سبع مرات)", count: 7, isDefault: true },
+        { text: "أَمْسَيْنَا عَلَى فِطْرَةِ الإِسْلَامِ، وَكَلِمَةِ الإِخْلَاصِ، وَدِينِ نَبِيِّنَا مُحَمَّدٍ، وَمِلَّةِ أَبِينَا إِبْرَاهِيمَ حَنِيفًا مُسْلِمًا وَمَا أَنَا مِنَ المُشْرِكِينَ. (مرة واحدة)", count: 1, isDefault: true },
+        { text: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ للهِ، وَالحَمْدُ للهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ، وَلَهُ الحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي القَبْرِ. (مرة واحدة)", count: 1, isDefault: true },
+        { text: "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ المَصِيرُ. (مرة واحدة)", count: 1, isDefault: true },
+        { text: "اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ. (أربع مرات)", count: 4, isDefault: true },
+        { text: "اللَّهُمَّ مَا أَمْسَى بِي مِنْ نِعْمَةٍ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، لَكَ الحَمْدُ، وَلَكَ الشَّكْرُ. (مرة واحدة)", count: 1, isDefault: true },
+        { text: "يَا حَيُّ يَا قَيُّومُ بِكَ أَسْتَغِيثُ، فَأَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ. (مرة واحدة)", count: 1, isDefault: true },
+        { text: "اللَّهُمَّ عَافِني فِي بَدَنِي، اللَّهُمَّ عَافِني فِي سَمْعِي، اللَّهُمَّ عَافِني فِي بَصَرِي، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الكُفْرِ وَالفَقْرِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ القَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ. (ثلاث مرات)", count: 3, isDefault: true },
+        { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ العَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ العَفْوَ وَالعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي، وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي، وَعَنْ يَمِينِي وَعَنْ شِمَالِي، وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أَغْتَالَ مِنْ تَحْتِي. (مرة واحدة)", count: 1, isDefault: true },
+        { text: "اللَّهُمَّ فَاطِرَ السَّمَاوَاتِ وَالْأَرْضِ، عَالِمَ الغَيْبِ وَالشَّهَادَةِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي وَشَرِّ الشَّيْطَانِ وَشِرْكِهِ (وأن أقترف على نفسي سوءاً، أو أجره إلى مسلم). (مرة واحدة)", count: 1, isDefault: true },
+        { text: "اللَّهُمَّ أَنْتَ رَبِّي، لَا إِلَهَ إِلَّا أَنْتَ، خَلقتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي، فَاغْفِرْ لِي؛ فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ. (مرة واحدة)", count: 1, isDefault: true }
+    ];
+
+    let sabahZekrs = [];
+    let masaaZekrs = [];
+    let currentCategory = "sabah";
+    let selectedIndices = new Set();
+
+    const previewArea = document.getElementById("previewArea");
+    const btnSabah = document.getElementById("btnSabah");
+    const btnMasaa = document.getElementById("btnMasaa");
+    const sendBtn = document.getElementById("sendWhatsAppBtn");
+    const addZekrBtn = document.getElementById("addZekrBtn");
+    const newZekrText = document.getElementById("newZekrText");
+    const newCount = document.getElementById("newCount");
+    const newCategory = document.getElementById("newCategory");
+    const statusDiv = document.getElementById("saveStatus");
+
+    async function loadFromSupabase() {
+        try {
+            sabahZekrs = JSON.parse(JSON.stringify(DEFAULT_SABAH));
+            masaaZekrs = JSON.parse(JSON.stringify(DEFAULT_MASAA));
+
+            const { data, error } = await _supabase
+                .from('my_azkar')
+                .select('id, text, count, category');
+
+            if (error) throw error;
+
+            if (data && data.length > 0) {
+                data.forEach(item => {
+                    const zekrObj = { 
+                        text: item.text, 
+                        count: parseInt(item.count), 
+                        isDefault: false,
+                        id: item.id
+                    };
+                    if (item.category === "sabah") {
+                        sabahZekrs.push(zekrObj);
+                    } else if (item.category === "masaa") {
+                        masaaZekrs.push(zekrObj);
+                    }
+                });
+            }
+            
+            renderCurrentZekrs();
+        } catch (err) {
+            console.error("Error loading data from Supabase:", err);
+            sabahZekrs = JSON.parse(JSON.stringify(DEFAULT_SABAH));
+            masaaZekrs = JSON.parse(JSON.stringify(DEFAULT_MASAA));
+            renderCurrentZekrs();
+        }
+    }
+
+    function showStatus(message, isSuccess) {
+        if (statusDiv) {
+            statusDiv.innerHTML = message;
+            statusDiv.style.background = isSuccess ? "#d4edda" : "#f8d7da";
+            statusDiv.style.color = isSuccess ? "#155724" : "#721c24";
+            setTimeout(() => {
+                statusDiv.innerHTML = "☁️ يتم حفظ ومزامنة الأذكار مباشرة في قاعدة البيانات السحابية";
+                statusDiv.style.background = "#d9edf7";
+                statusDiv.style.color = "#31708f";
+            }, 3000);
+        }
+    }
+
+    function updateButtonsStyle() {
+        if (currentCategory === "sabah") {
+            btnSabah.classList.remove("sabah-inactive", "masaa-active", "masaa-inactive");
+            btnSabah.classList.add("sabah-active");
+            btnMasaa.classList.remove("masaa-active", "sabah-active");
+            btnMasaa.classList.add("masaa-inactive");
+        } else {
+            btnMasaa.classList.remove("masaa-inactive", "sabah-active", "sabah-inactive");
+            btnMasaa.classList.add("masaa-active");
+            btnSabah.classList.remove("sabah-active", "masaa-active");
+            btnSabah.classList.add("sabah-inactive");
+        }
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    async function deleteZekr(index) {
+        const zekrsArray = (currentCategory === "sabah") ? sabahZekrs : masaaZekrs;
+        const zekr = zekrsArray[index];
+        
+        if (zekr.isDefault) {
+            alert("⚠️ لا يمكن حذف الأذكار الافتراضية الأساسية.");
+            return;
+        }
+        
+        if (!confirm("🗑️ هل أنت متأكد من حذف هذا الذكر نهائياً من السحاب والجهاز؟")) return;
+        
+        try {
+            showStatus("⏳ جاري الحذف من السحاب...", true);
+            
+            const { error } = await _supabase
+                .from('my_azkar')
+                .delete()
+                .eq('id', zekr.id);
+            
+            if (error) throw error;
+            
+            zekrsArray.splice(index, 1);
+            selectedIndices.clear();
+            renderCurrentZekrs();
+            showStatus("✅ تم حذف الذكر بنجاح من السحاب", true);
+            
+        } catch (err) {
+            console.error("Error deleting from Supabase:", err);
+            showStatus("❌ فشل الحذف من السحاب", false);
+            alert("⚠️ حدث خطأ أثناء محاولة حذف الذكر من قاعدة البيانات.");
+        }
+    }
+
+    function renderCurrentZekrs() {
+        const zekrsArray = (currentCategory === "sabah") ? sabahZekrs : masaaZekrs;
+        selectedIndices.clear();
+        let html = `<div style="margin-bottom: 8px; font-size:0.8rem; color:#6f4e2e;">☑️ اختر ما تريد (اضغط على المربع) :</div>`;
+        
+        zekrsArray.forEach((zekr, idx) => {
+            const deleteButton = !zekr.isDefault ? 
+                `<button class="delete-btn" data-delete-idx="${idx}">🗑️ حذف</button>` : '';
+            
+            html += `
+                <div class="zekr-item" data-idx="${idx}">
+                    <input type="checkbox" class="check-box" data-idx="${idx}" id="chk_${idx}">
+                    <div class="zekr-text">${escapeHtml(zekr.text)}</div>
+                    <div class="zekr-count">🔄 ${zekr.count} مرة</div>
+                    ${deleteButton}
+                </div>
+            `;
+        });
+        
+        previewArea.innerHTML = html;
+        
+        document.querySelectorAll('.check-box').forEach(cb => {
+            cb.addEventListener('change', (e) => {
+                const idx = parseInt(e.target.getAttribute('data-idx'));
+                if (e.target.checked) selectedIndices.add(idx);
+                else selectedIndices.delete(idx);
+            });
+        });
+        
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const idx = parseInt(btn.getAttribute('data-delete-idx'));
+                deleteZekr(idx);
+            });
+        });
+    }
+
+    function sendToWhatsApp() {
+        const zekrsArray = (currentCategory === "sabah") ? sabahZekrs : masaaZekrs;
+        const selectedArray = Array.from(selectedIndices).sort((a,b)=>a-b);
+        if (selectedArray.length === 0) {
+            alert("⚠️ الرجاء اختيار ذكر واحد على الأقل قبل الإرسال.");
+            return;
+        }
+        let message = `📿 *أذكار ${currentCategory === "sabah" ? "الصباح" : "المساء"}* 📿\n\n`;
+        for (let idx of selectedArray) {
+            const z = zekrsArray[idx];
+            message += `🔹 ${z.text}\n📖 (${z.count} مرة)\n\n`;
+        }
+        message += `— {ألا بذكر الله تطمئن القلوب} —`;
+        const encodedMsg = encodeURIComponent(message);
+        const whatsappUrl = `https://wa.me/?text=${encodedMsg}`;
+        window.open(whatsappUrl, '_blank');
+    }
+
+    async function addNewZekr() {
+        let text = newZekrText.value.trim();
+        if (text === "") {
+            alert("يرجى كتابة نص الذكر");
+            return;
+        }
+        let countVal = parseInt(newCount.value);
+        if (isNaN(countVal) || countVal < 1) countVal = 1;
+        const category = newCategory.value;
+        
+        try {
+            showStatus("⏳ جاري المزامنة والحفظ سحابياً...", true);
+            
+            const { data, error } = await _supabase
+                .from('my_azkar')
+                .insert([
+                    { text: text, count: countVal, category: category }
+                ])
+                .select();
+            
+            if (error) throw error;
+            
+            const newZekr = { 
+                text: text, 
+                count: countVal, 
+                isDefault: false,
+                id: data[0].id
+            };
+            
+            if (category === "sabah") {
+                sabahZekrs.push(newZekr);
+                if (currentCategory === "sabah") renderCurrentZekrs();
+            } else {
+                masaaZekrs.push(newZekr);
+                if (currentCategory === "masaa") renderCurrentZekrs();
+            }
+            
+            newZekrText.value = "";
+            newCount.value = "1";
+            showStatus("✅ تم الحفظ والمزامنة السحابية بنجاح", true);
+            alert("✅ تمت إضافة الذكر وحفظه سحابياً بنجاح");
+
+        } catch (err) {
+            console.error("Error saving to Supabase:", err);
+            showStatus("❌ فشل الحفظ السحابي", false);
+            alert("⚠️ واجهتنا مشكلة أثناء المزامنة السحابية.");
+        }
+    }
+
+    btnSabah.addEventListener("click", () => {
+        currentCategory = "sabah";
+        updateButtonsStyle();
+        renderCurrentZekrs();
+    });
+    btnMasaa.addEventListener("click", () => {
+        currentCategory = "masaa";
+        updateButtonsStyle();
+        renderCurrentZekrs();
+    });
+    sendBtn.addEventListener("click", sendToWhatsApp);
+    addZekrBtn.addEventListener("click", addNewZekr);
+
+    updateButtonsStyle();
+    loadFromSupabase();
+</script>
+</body>
+</html>
