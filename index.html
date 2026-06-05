@@ -146,6 +146,21 @@
         .delete-btn:active {
             transform: scale(0.95);
         }
+        .edit-btn {
+            background: #ffc107;
+            color: #212529;
+            border: none;
+            border-radius: 40px;
+            padding: 4px 14px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .edit-btn:active {
+            transform: scale(0.95);
+        }
         .send-btn {
             background: #25D366;
             border: none;
@@ -255,6 +270,41 @@
             background: #97bc62;
             border-radius: 10px;
         }
+
+        /* نافذة التعديل المنبثقة */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .modal-box {
+            background: #fffdf7;
+            border-radius: 32px;
+            padding: 24px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 2px solid #c0cfb5;
+        }
+        .modal-box h3 {
+            margin-top: 0;
+            color: #2c5f2d;
+            text-align: center;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -290,6 +340,7 @@
                 <select id="newCategory">
                     <option value="sabah">أذكار الصباح</option>
                     <option value="masaa">أذكار المساء</option>
+                    <option value="both">كلاهما (صباح ومساء)</option>
                 </select>
             </div>
             <div class="input-group" style="flex:0.5">
@@ -300,6 +351,24 @@
         <div class="note">📌 الأذكار التي تضيفها ستبقى محفوظة بشكل دائم على سيرفر Supabase الخاص بك.<br>🗑️ ملاحظة: لا يمكن حذف الأذكار الافتراضية، فقط الأذكار التي أضفتها أنت تظهر بجانبها زر حذف.</div>
     </div>
     <footer>📖 {ألا بذكر الله تطمئن القلوب}</footer>
+</div>
+
+<div class="modal-overlay" id="editModal">
+    <div class="modal-box">
+        <h3>📝 تعديل الذكر</h3>
+        <div style="margin-bottom: 12px;">
+            <label style="display:block; font-weight:bold; margin-bottom:5px; color:#2b532b;">نص الذكر</label>
+            <textarea id="editZekrText" rows="4"></textarea>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="display:block; font-weight:bold; margin-bottom:5px; color:#2b532b;">عدد المرات</label>
+            <input type="number" id="editCount" min="1">
+        </div>
+        <div class="modal-buttons">
+            <button class="small-btn" id="cancelEditBtn" style="background:#6c757d; margin-top:0;">إلغاء</button>
+            <button class="small-btn" id="saveEditBtn" style="margin-top:0;">حفظ التعديل</button>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -327,7 +396,7 @@
         { text: "اللَّهُمَّ إِنِّى أَصْبَحْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ. (أربع مرات)", count: 4, isDefault: true },
         { text: "اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، لَكَ الحَمْدُ، وَلَكَ الشَّكْرُ. (مرة واحدة)", count: 1, isDefault: true },
         { text: "يَا حَيُّ يَا قَيُّومُ بِكَ أَسْتَغِيثُ, فَأَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ. (مرة واحدة)", count: 1, isDefault: true },
-        { text: "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الكُفْرِ وَالفَقْرِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ القَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ. (ثلاث مرات)", count: 3, isDefault: true },
+        { text: "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الكُفْرِ وَالفَقْرِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ القَبْرِ، لَا إِلَهَ إِلَّا أنتَ. (ثلاث مرات)", count: 3, isDefault: true },
         { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ العَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ العَفْوَ وَالعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي، وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي، وَعَنْ يَمِينِي وَعَنْ شِمَالِي، وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أَغْتَالَ مِنْ تَحْتِي. (مرة واحدة)", count: 1, isDefault: true },
         { text: "اللَّهُمَّ فَاطِرَ السَّمَاوَاتِ وَالْأَرْضِ، عَالِمَ الغَيْبِ وَالشَّهَادَةِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي وَشَرِّ الشَّيْطَانِ وَشِرْكِهِ (وأن أقترف على نفسي سوءاً، أو أجره إلى مسلم). (مرة واحدة)", count: 1, isDefault: true },
         { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا. (مرة واحدة)", count: 1, isDefault: true },
@@ -335,13 +404,13 @@
     ];
 
     const DEFAULT_MASAA = [
-        { text: "أعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّحِيمِ: {اللهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَّهُ مَا فِي السَّمَوَاتِ وَمَا فِي الْأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَوَاتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ} [البقرة: 255] (مرة واحدة)", count: 1, isDefault: true },
+        { text: "أعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّحِيمِ: {اللهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَّهُ مَا فِي السَّمَوَاتِ وَمَا فِي الْأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَوَاتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهو العَلِيُّ العَظِيمُ} [البقرة: 255] (مرة واحدة)", count: 1, isDefault: true },
         { text: "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: {قُلْ هُوَ اللهُ أَحَدٌ * اللهُ الصَّمَدُ * لَمْ يَلِدْ وَلَمْ يُولَد * وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ} [الإخلاص: 1-4] (ثلاث مرات)", count: 3, isDefault: true },
         { text: "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: {قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ * مِن شَرِّ مَا خَلَقَ * وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ * وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ * وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ} [الفلق: 1-5] (ثلاث مرات)", count: 3, isDefault: true },
         { text: "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: {قُلْ أَعُوذُ بِرَبِّ النَّاسِ * مَلِكِ النَّاسِ * إِلَهِ النَّاسِ * مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ * الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ * مِنَ الْجِنَّةِ وَالنَّاسِ} [الناس: 1-6] (ثلاث مرات)", count: 3, isDefault: true },
         { text: "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ، وَلَهُ الحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ. (مرة واحدة، أو عشر مرات، أو مائة مرة)", count: 1, isDefault: true },
         { text: "سُبْحَانَ اللهِ وَبِحَمْدِهِ. (مائة مرة)", count: 100, isDefault: true },
-        { text: "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ العَلِيمُ. (ثلاث مرات)", count: 3, isDefault: true },
+        { text: "بِسْمِ اللَّهِ الَّذي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ العَلِيمُ. (ثلاث مرات)", count: 3, isDefault: true },
         { text: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ. (ثلاث مرات)", count: 3, isDefault: true },
         { text: "رَضِيتُ بِاللَّهِ رَبًّا، وَبِالإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ نَبِيًّا وَرَسُولًا. (ثلاث مرات)", count: 3, isDefault: true },
         { text: "حَسْبِيَ اللهُ لَا إِلَهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ العَرْشِ العَظِيمِ. (سبع مرات)", count: 7, isDefault: true },
@@ -361,6 +430,9 @@
     let masaaZekrs = [];
     let currentCategory = "sabah";
     let selectedIndices = new Set();
+    
+    // متغيرات لتتبع العنصر الذي يتم تعديله حالياً
+    let editingIndex = null;
 
     const previewArea = document.getElementById("previewArea");
     const btnSabah = document.getElementById("btnSabah");
@@ -371,6 +443,13 @@
     const newCount = document.getElementById("newCount");
     const newCategory = document.getElementById("newCategory");
     const statusDiv = document.getElementById("saveStatus");
+
+    // عناصر النافذة المنبثقة للتعديل
+    const editModal = document.getElementById("editModal");
+    const editZekrText = document.getElementById("editZekrText");
+    const editCount = document.getElementById("editCount");
+    const saveEditBtn = document.getElementById("saveEditBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
 
     async function loadFromSupabase() {
         try {
@@ -389,12 +468,16 @@
                         text: item.text, 
                         count: parseInt(item.count), 
                         isDefault: false,
-                        id: item.id
+                        id: item.id,
+                        category: item.category
                     };
                     if (item.category === "sabah") {
                         sabahZekrs.push(zekrObj);
                     } else if (item.category === "masaa") {
                         masaaZekrs.push(zekrObj);
+                    } else if (item.category === "both") {
+                        sabahZekrs.push(JSON.parse(JSON.stringify(zekrObj)));
+                        masaaZekrs.push(JSON.parse(JSON.stringify(zekrObj)));
                     }
                 });
             }
@@ -465,7 +548,14 @@
             
             if (error) throw error;
             
-            zekrsArray.splice(index, 1);
+            // في حال كان الذكر مصنف كـ "كلاهما"، يجب حذفه من المصفوفتين محلياً
+            if (zekr.category === "both") {
+                sabahZekrs = sabahZekrs.filter(z => z.id !== zekr.id);
+                masaaZekrs = masaaZekrs.filter(z => z.id !== zekr.id);
+            } else {
+                zekrsArray.splice(index, 1);
+            }
+            
             selectedIndices.clear();
             renderCurrentZekrs();
             showStatus("✅ تم حذف الذكر بنجاح من السحاب", true);
@@ -474,6 +564,82 @@
             console.error("Error deleting from Supabase:", err);
             showStatus("❌ فشل الحذف من السحاب", false);
             alert("⚠️ حدث خطأ أثناء محاولة حذف الذكر من قاعدة البيانات.");
+        }
+    }
+
+    // فتح نافذة التعديل
+    function openEditModal(index) {
+        const zekrsArray = (currentCategory === "sabah") ? sabahZekrs : masaaZekrs;
+        const zekr = zekrsArray[index];
+        editingIndex = index;
+        editZekrText.value = zekr.text;
+        editCount.value = zekr.count;
+        editModal.style.display = "flex";
+    }
+
+    // إغلاق نافذة التعديل
+    function closeEditModal() {
+        editModal.style.display = "none";
+        editingIndex = null;
+    }
+
+    // حفظ التعديلات
+    async function saveZekrEdit() {
+        if (editingIndex === null) return;
+        
+        const zekrsArray = (currentCategory === "sabah") ? sabahZekrs : masaaZekrs;
+        const zekr = zekrsArray[editingIndex];
+        const updatedText = editZekrText.value.trim();
+        let updatedCount = parseInt(editCount.value);
+
+        if (updatedText === "") {
+            alert("يرجى كتابة نص الذكر");
+            return;
+        }
+        if (isNaN(updatedCount) || updatedCount < 1) updatedCount = 1;
+
+        if (zekr.isDefault) {
+            // الأذكار الافتراضية يتم تعديلها محلياً فقط فورياً
+            zekr.text = updatedText;
+            zekr.count = updatedCount;
+            closeEditModal();
+            renderCurrentZekrs();
+            showStatus("✏️ تم تعديل الذكر الافتراضي بنجاح مؤقتاً", true);
+        } else {
+            // الأذكار المضافة سحابياً يتم تعديلها في Supabase
+            try {
+                showStatus("⏳ جاري تحديث الذكر سحابياً...", true);
+                
+                const { error } = await _supabase
+                    .from('my_azkar')
+                    .update({ text: updatedText, count: updatedCount })
+                    .eq('id', zekr.id);
+                
+                if (error) throw error;
+                
+                // تحديث البيانات محلياً
+                if (zekr.category === "both") {
+                    // إذا كان الخيار كلاهما، نحدثه في كلا المصفوفتين
+                    [sabahZekrs, masaaZekrs].forEach(arr => {
+                        const target = arr.find(z => z.id === zekr.id);
+                        if (target) {
+                            target.text = updatedText;
+                            target.count = updatedCount;
+                        }
+                    });
+                } else {
+                    zekr.text = updatedText;
+                    zekr.count = updatedCount;
+                }
+                
+                closeEditModal();
+                renderCurrentZekrs();
+                showStatus("✅ تم تحديث وتعديل البيانات سحابياً بنجاح", true);
+            } catch (err) {
+                console.error("Error updating Supabase:", err);
+                showStatus("❌ فشل تحديث البيانات سحابياً", false);
+                alert("⚠️ واجهتنا مشكلة أثناء تعديل الذكر سحابياً.");
+            }
         }
     }
 
@@ -486,11 +652,14 @@
             const deleteButton = !zekr.isDefault ? 
                 `<button class="delete-btn" data-delete-idx="${idx}">🗑️ حذف</button>` : '';
             
+            const editButton = `<button class="edit-btn" data-edit-idx="${idx}">✏️ تعديل</button>`;
+            
             html += `
                 <div class="zekr-item" data-idx="${idx}">
                     <input type="checkbox" class="check-box" data-idx="${idx}" id="chk_${idx}">
                     <div class="zekr-text">${escapeHtml(zekr.text)}</div>
                     <div class="zekr-count">🔄 ${zekr.count} مرة</div>
+                    ${editButton}
                     ${deleteButton}
                 </div>
             `;
@@ -511,6 +680,14 @@
                 e.stopPropagation();
                 const idx = parseInt(btn.getAttribute('data-delete-idx'));
                 deleteZekr(idx);
+            });
+        });
+
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const idx = parseInt(btn.getAttribute('data-edit-idx'));
+                openEditModal(idx);
             });
         });
     }
@@ -559,15 +736,20 @@
                 text: text, 
                 count: countVal, 
                 isDefault: false,
-                id: data[0].id
+                id: data[0].id,
+                category: category
             };
             
             if (category === "sabah") {
                 sabahZekrs.push(newZekr);
                 if (currentCategory === "sabah") renderCurrentZekrs();
-            } else {
+            } else if (category === "masaa") {
                 masaaZekrs.push(newZekr);
                 if (currentCategory === "masaa") renderCurrentZekrs();
+            } else if (category === "both") {
+                sabahZekrs.push(JSON.parse(JSON.stringify(newZekr)));
+                masaaZekrs.push(JSON.parse(JSON.stringify(newZekr)));
+                renderCurrentZekrs();
             }
             
             newZekrText.value = "";
@@ -594,6 +776,10 @@
     });
     sendBtn.addEventListener("click", sendToWhatsApp);
     addZekrBtn.addEventListener("click", addNewZekr);
+    
+    // أحداث أزرار نافذة التعديل
+    saveEditBtn.addEventListener("click", saveZekrEdit);
+    cancelEditBtn.addEventListener("click", closeEditModal);
 
     updateButtonsStyle();
     loadFromSupabase();
