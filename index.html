@@ -2,845 +2,637 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>أذكار الصباح والمساء - حفظ سحابي تفاعلي</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أذكار الصباح والمساء</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #27ae60;
+            --accent-night: #8e44ad;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body.night-mode {
+            --primary-color: #2c3e50;
+            --accent-color: #8e44ad;
+            --bg-color: #1a1a2e;
+            --card-bg: #16213e;
+            --text-color: #e94560;
+            --text-secondary: #b2b2b2;
+        }
+
         * {
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Tahoma', 'Traditional Arabic', 'Arial', sans-serif;
-        }
-        body {
-            background: linear-gradient(145deg, #e8f0e8 0%, #d4e0d4 100%);
             margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+            padding-bottom: 80px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+            color: white;
             padding: 20px;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 850px;
-            margin: 0 auto;
-            background: #fffdf7;
-            border-radius: 48px;
-            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            padding: 20px 24px 32px;
-            border: 1px solid #c0cfb5;
-        }
-        h1 {
             text-align: center;
-            font-size: 1.9rem;
-            color: #2c5f2d;
-            margin-top: 0;
-            margin-bottom: 8px;
-            border-bottom: 3px solid #b9d8b3;
-            display: inline-block;
-            width: auto;
-            padding-bottom: 10px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
         }
-        .title-div {
-            text-align: center;
-            margin-bottom: 20px;
+
+        header h1 {
+            font-family: 'Amiri', serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
         }
-        .btn-group {
+
+        .tabs {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin: 20px 0 25px;
-            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
         }
-        .main-btn {
-            border: none;
-            padding: 12px 32px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            border-radius: 60px;
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             color: white;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: inherit;
-            background: #9e9e9e;
-            box-shadow: 0 5px 0 #5e5e5e;
-        }
-        .main-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 #5e5e5e;
-        }
-        .main-btn.sabah-active {
-            background: #2c5f2d;
-            box-shadow: 0 5px 0 #1a3b1a;
-        }
-        .main-btn.masaa-active {
-            background: #8b5a2b;
-            box-shadow: 0 5px 0 #5e3e1d;
-        }
-        .main-btn.sabah-inactive {
-            background: #7d9e6e;
-            box-shadow: 0 5px 0 #537a3e;
-        }
-        .main-btn.masaa-inactive {
-            background: #c6894b;
-            box-shadow: 0 5px 0 #8b5a2b;
-        }
-        .preview-window {
-            background: #fef7e0;
-            border-radius: 32px;
-            padding: 16px;
-            border: 2px solid #d9c48b;
-            max-height: 380px;
-            overflow-y: auto;
-            margin-bottom: 25px;
-            box-shadow: inset 0 0 6px #cfb87c, 0 4px 12px rgba(0,0,0,0.05);
-        }
-        .zekr-item {
-            background: white;
+            padding: 8px 20px;
             border-radius: 20px;
-            padding: 12px 16px;
-            margin-bottom: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Tajawal', sans-serif;
+            font-weight: bold;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--accent-color);
+        }
+
+        body.night-mode .tab-btn.active {
+            color: var(--accent-night);
+        }
+
+        .controls {
             display: flex;
-            flex-wrap: wrap;
-            align-items: flex-start;
-            gap: 10px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-            border-right: 6px solid #97bc62;
+            justify-content: space-between;
+            padding: 15px 20px;
+            max-width: 800px;
+            margin: 0 auto;
         }
-        .zekr-text {
-            flex: 1;
+
+        .action-btn {
+            background-color: var(--card-bg);
+            border: 1px solid #ddd;
+            color: var(--text-color);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
             font-size: 0.9rem;
-            line-height: 1.6;
-            color: #2c3e2b;
-            word-break: break-word;
-            white-space: normal;
-            overflow-wrap: break-word;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
         }
-        .zekr-count {
-            background: #e9f5e1;
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: #2b5e2f;
-            white-space: nowrap;
-            flex-shrink: 0;
+
+        .action-btn:hover {
+            transform: translateY(-2px);
         }
-        .check-box {
-            transform: scale(1.1);
-            margin-left: 4px;
-            accent-color: #2c5f2d;
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            flex-shrink: 0;
-            margin-top: 4px;
-        }
-        .delete-btn {
-            background: #dc3545;
+
+        .whatsapp-btn {
+            background-color: #25D366;
             color: white;
             border: none;
-            border-radius: 40px;
-            padding: 4px 14px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-            flex-shrink: 0;
         }
-        .delete-btn:active {
-            transform: scale(0.95);
-        }
-        .edit-btn {
-            background: #ffc107;
-            color: #212529;
-            border: none;
-            border-radius: 40px;
-            padding: 4px 14px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-            flex-shrink: 0;
-        }
-        .edit-btn:active {
-            transform: scale(0.95);
-        }
-        .send-btn {
-            background: #25D366;
-            border: none;
-            width: 100%;
-            padding: 16px;
-            font-size: 1.5rem;
-            font-weight: bold;
+
+        .add-btn {
+            background-color: #3498db;
             color: white;
-            border-radius: 60px;
+            border: none;
+        }
+
+        .azkar-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .azkar-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border-right: 5px solid var(--accent-color);
+            transition: var(--transition);
+        }
+        
+        body.night-mode .azkar-card {
+            border-right: 5px solid var(--accent-night);
+        }
+
+        /* أزرار التعديل والحذف */
+        .card-actions {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
             cursor: pointer;
-            transition: 0.2s;
+            font-size: 1.1rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .icon-btn:hover {
+            opacity: 1;
+        }
+
+        .edit-btn { color: #f39c12; }
+        .delete-btn { color: #e74c3c; }
+
+        .checkbox-area {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .azkar-text {
+            font-family: 'Amiri', serif;
+            font-size: 1.4rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            margin-top: 10px;
+            color: var(--text-color);
+        }
+
+        .azkar-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-top: 10px;
+        }
+
+        .counter-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 30px;
-            font-family: inherit;
-            box-shadow: 0 6px 0 #1e8a4b;
+            transition: transform 0.1s;
         }
-        .send-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 #1e8a4b;
-        }
-        .add-section {
-            background: #e6f0e3;
-            border-radius: 36px;
-            padding: 20px;
-            margin-top: 5px;
-            border: 1px solid #bdd8ad;
-        }
-        .add-section h3 {
-            margin-top: 0;
-            text-align: center;
-            color: #1f543f;
-        }
-        .flex-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: flex-end;
-            margin-bottom: 15px;
-        }
-        .input-group {
-            flex: 1;
-            min-width: 160px;
-        }
-        .input-group label {
-            display: block;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #2b532b;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border-radius: 28px;
-            border: 1px solid #bbb;
-            background: white;
-            font-family: inherit;
-            font-size: 0.95rem;
-        }
-        textarea {
-            border-radius: 20px;
-            resize: vertical;
-            line-height: 1.5;
-        }
-        .small-btn {
-            background: #558b2f;
-            color: white;
-            border: none;
-            padding: 10px 22px;
-            border-radius: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .note {
-            font-size: 0.75rem;
-            color: #4e6b3c;
-            text-align: center;
-            margin-top: 15px;
-        }
-        .save-alert {
-            background: #d9edf7;
-            color: #31708f;
-            padding: 6px 12px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            text-align: center;
-            margin-top: 10px;
-        }
-        footer {
-            font-size: 0.7rem;
-            text-align: center;
-            margin-top: 20px;
-            color: #6b5e3a;
-        }
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1e9cf;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #97bc62;
-            border-radius: 10px;
+        
+        body.night-mode .counter-btn {
+            background-color: var(--accent-night);
         }
 
-        .modal-overlay {
+        .counter-btn:active {
+            transform: scale(0.9);
+        }
+
+        .counter-display {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .meta-info {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* مودال (نافذة منبثقة) */
+        .modal {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            display: none;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            padding: 20px;
         }
-        .modal-box {
-            background: #fffdf7;
-            border-radius: 32px;
-            padding: 24px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            border: 2px solid #c0cfb5;
+
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
-        .modal-box h3 {
-            margin-top: 0;
-            color: #2c5f2d;
-            text-align: center;
-        }
-        .modal-buttons {
+
+        .modal-header {
             display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 15px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        body.night-mode .modal-content {
+            background-color: #1a1a2e;
+            color: white;
+        }
+
+        /* رسائل التنبيه (Toast) */
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1001;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 17px;
+        }
+
+        .toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+
+        .completed .azkar-text {
+            text-decoration: line-through;
+            color: #aaa;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="title-div">
-        <h1>🌸 أذكار الصباح والمساء 🌸</h1>
-    </div>
 
-    <div class="btn-group">
-        <button class="main-btn" id="btnSabah">🍃 أذكار الصباح</button>
-        <button class="main-btn" id="btnMasaa">🌙 أذكار المساء</button>
-    </div>
-
-    <div class="preview-window" id="previewArea">
-        <p style="text-align:center; color:#8b7a4a;">✨ جاري تحميل الأذكار ومزامنتها سحابياً... ✨</p>
-    </div>
-
-    <button class="send-btn" id="sendWhatsAppBtn">📲 إرسال الأذكار المختارة إلى واتساب</button>
-
-    <div class="add-section">
-        <h3>➕ إضافة ذكر جديد</h3>
-        <div class="flex-row">
-            <div class="input-group" style="flex:2">
-                <label>نص الذكر (بالتشكيل أو دونه)</label>
-                <textarea id="newZekrText" rows="2" placeholder="مثال: سبحان الله وبحمده ..."></textarea>
-            </div>
-            <div class="input-group">
-                <label>عدد المرات</label>
-                <input type="number" id="newCount" value="1" min="1">
-            </div>
-            <div class="input-group">
-                <label>التصنيف</label>
-                <select id="newCategory">
-                    <option value="sabah">أذكار الصباح</option>
-                    <option value="masaa">أذكار المساء</option>
-                    <option value="both">كلاهما (صباح ومساء)</option>
-                </select>
-            </div>
-            <div class="input-group" style="flex:0.5">
-                <button class="small-btn" id="addZekrBtn" style="margin-top:22px;">➕ إضافة</button>
-            </div>
+    <header>
+        <h1>أذكار المسلم</h1>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('morning')">أذكار الصباح</button>
+            <button class="tab-btn" onclick="switchTab('evening')">أذكار المساء</button>
         </div>
-        <div class="save-alert" id="saveStatus">☁️ يتم حفظ ومزامنة الأذكار مباشرة في قاعدة البيانات السحابية</div>
-        <div class="note">📌 الأذكار التي تضيفها ستبقى محفوظة بشكل دائم على سيرفر Supabase الخاص بك.<br>🗑️ ملاحظة: لا يمكن حذف الأذكار الافتراضية، التعديلات المحلية للأذكار الافتراضية ستبقى محفوظة في جهازك.</div>
+    </header>
+
+    <div class="controls">
+        <button class="action-btn add-btn" onclick="openModal()">
+            <span>+</span> إضافة ذكر
+        </button>
+        <button class="action-btn whatsapp-btn" onclick="shareSelected()">
+            <span>📱 إرسال المختارة</span>
+        </button>
     </div>
-    <footer>📖 {ألا بذكر الله تطمئن القلوب}</footer>
-</div>
 
-<div class="modal-overlay" id="editModal">
-    <div class="modal-box">
-        <h3>📝 تعديل الذكر</h3>
-        <div style="margin-bottom: 12px;">
-            <label style="display:block; font-weight:bold; margin-bottom:5px; color:#2b532b;">نص الذكر</label>
-            <textarea id="editZekrText" rows="4"></textarea>
-        </div>
-        <div style="margin-bottom: 15px;">
-            <label style="display:block; font-weight:bold; margin-bottom:5px; color:#2b532b;">عدد المرات</label>
-            <input type="number" id="editCount" min="1">
-        </div>
-        <div class="modal-buttons">
-            <button class="small-btn" id="cancelEditBtn" style="background:#6c757d; margin-top:0;">إلغاء</button>
-            <button class="small-btn" id="saveEditBtn" style="margin-top:0;">حفظ التعديل</button>
-        </div>
-    </div>
-</div>
+    <main id="azkar-list" class="azkar-container">
+        <!-- سيتم ملء الأذكار هنا -->
+    </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-    const SUPABASE_URL = "https://isrlcblnqgdjpauyuwqn.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_oIb4K6PsCH-sDGP2cq1eHQ_l32hUhw7";
-    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // تعريف النصوص الكاملة كما هي
-    const FULL_SABAH_TEXTS = [
-        "أعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّحِيمِ: {اللهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَّهُ مَا فِي السَّمَواتِ وَمَا فِي الْأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَواتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ} [البقرة: 255] (مرة واحدة)",
-        "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: {قُلْ هُوَ اللهُ أَحَدٌ * اللهُ الصَّمَدُ * لَمْ يَلِدْ وَلَمْ يُولَدْ * وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ} [الإخلاص: 1-4] (ثلاث مرات)",
-        "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: {قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ * مِن شَرِّ مَا خَلَقَ * وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ * وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ * وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ} [الفلق: 1-5] (ثلاث مرات)",
-        "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: {قُلْ أَعُوذُ بِرَبِّ النَّاسِ * مَلِكِ النَّاسِ * إِلَهِ النَّاسِ * مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ * الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ * مِنَ الْجِنَّةِ وَالنَّاسِ} [الناس: 1-6] (ثلاث مرات)",
-        "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ، وَلَهُ الحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ. (مرة واحدة، أو عشر مرات، أو مائة مرة)",
-        "سُبْحَانَ اللهِ وَبِحَمْدِهِ. (مائة مرة)",
-        "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ العَلِيمُ. (ثلاث مرات)",
-        "رَضِيتُ بِاللهِ رَبًّا، وَبِالإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ نَبِيًّا وَرَسُولًا. (ثلاث مرات)",
-        "حَسْبِيَ اللهُ لَا إِلَهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ العَرْشِ العَظِيم. (سبع مرات)",
-        "أَصْبَحْنَا عَلَى فِطْرَةِ الإِسْلَامِ، وَكَلِمَةِ الإِخْلَاصِ، وَدِينِ نَبِيِّنَا مُحَمَّدٍ، وَمِلَّةِ أَبِينَا إِبْرَاهِيمَ حَنِيفًا مُسْلِمًا وَمَا أَنَا مِنَ المُشْرِكِينَ. (مرة واحدة)",
-        "أَصْبَحْنَا وَأَصْبَحَ المُلْكُ للهِ، وَالحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ، وَلَهُ الحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا اليَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا اليَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الكَسَلِ وَسُوءِ الكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي القَبْرِ. (مرة واحدة)",
-        "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ. (مرة واحدة)",
-        "اللَّهُمَّ إِنِّى أَصْبَحْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ. (أربع مرات)",
-        "اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، لَكَ الحَمْدُ، وَلَكَ الشَّكْرُ. (مرة واحدة)",
-        "يَا حَيُّ يَا قَيُّومُ بِكَ أَسْتَغِيثُ, فَأَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ. (مرة واحدة)",
-        "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الكُفْرِ وَالفَقْرِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ القَبْرِ، لَا إِلَهَ إِلَّا أنتَ. (ثلاث مرات)",
-        "اللَّهُمَّ إِنِّي أَسْأَلُكَ العَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ العَفْوَ وَالعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي، وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي، وَعَنْ يَمِينِي وَعَنْ شِمَالِي، وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أَغْتَالَ مِنْ تَحْتِي. (مرة واحدة)",
-        "اللَّهُمَّ فَاطِرَ السَّمَاوَاتِ وَالْأَرْضِ، عَالِمَ الغَيْبِ وَالشَّهَادَةِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي وَشَرِّ الشَّيْطَانِ وَشِرْكِهِ (وأن أقترف على نفسي سوءاً، أو أجره إلى مسلم). (مرة واحدة)",
-        "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا. (مرة واحدة)",
-        "اللَّهُمَّ أَنْتَ رَبِّي، لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطعتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي، فَاغْفِرْ لِي؛ فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ. (مرة واحدة)"
-    ];
-
-    const FULL_MASAA_TEXTS = [
-        "أعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّحِيمِ: {اللهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَّهُ مَا فِي السَّمَواتِ وَمَا فِي الْأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَواتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهو العَلِيُّ العَظِيمُ} [البقرة: 255] (مرة واحدة)",
-        "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: {قُلْ هُوَ اللهُ أَحَدٌ * اللهُ الصَّمَدُ * لَمْ يَلِدْ وَلَمْ يُولَد * وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ} [الإخلاص: 1-4] (ثلاث مرات)",
-        "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: {قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ * مِن شَرِّ مَا خَلَقَ * وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ * وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ * وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ} [الفلق: 1-5] (ثلاث مرات)",
-        "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: {قُلْ أَعُوذُ بِرَبِّ النَّاسِ * مَلِكِ النَّاسِ * إِلَهِ النَّاسِ * مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ * الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ * مِنَ الْجِنَّةِ وَالنَّاسِ} [الناس: 1-6] (ثلاث مرات)",
-        "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ، وَلَهُ الحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ. (مرة واحدة، أو عشر مرات، أو مائة مرة)",
-        "سُبْحَانَ اللهِ وَبِحَمْدِهِ. (مائة مرة)",
-        "بِسْمِ اللَّهِ الَّذي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ العَلِيمُ. (ثلاث مرات)",
-        "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ. (ثلاث مرات)",
-        "رَضِيتُ بِاللَّهِ رَبًّا، وَبِالإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ نَبِيًّا وَرَسُولًا. (ثلاث مرات)",
-        "حَسْبِيَ اللهُ لَا إِلَهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ العَرْشِ العَظِيمِ. (سبع مرات)",
-        "أَمْسَيْنَا عَلَى فِطْرَةِ الإِسْلَامِ، وَكَلِمَةِ الإِخْلَاصِ، وَدِينِ نَبِيِّنَا مُحَمَّدٍ، وَمِلَّةِ أَبِينَا إِبْرَاهِيمَ حَنِيفًا مُسْلِمًا وَمَا أَنَا مِنَ المُشْرِكِينَ. (مرة واحدة)",
-        "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ للهِ، وَالحَمْدُ للهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ، وَلَهُ الحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي القَبْرِ. (مرة واحدة)",
-        "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ المَصِيرُ. (مرة واحدة)",
-        "اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ. (أربع مرات)",
-        "اللَّهُمَّ مَا أَمْسَى بِي مِنْ نِعْمَةٍ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، لَكَ الحَمْدُ، وَلَكَ الشَّكْرُ. (مرة واحدة)",
-        "يَا حَيُّ يَا قَيُّومُ بِكَ أَسْتَغِيثُ، فَأَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ. (مرة واحدة)",
-        "اللَّهُمَّ عَافِني فِي بَدَنِي، اللَّهُمَّ عَافِني فِي سَمْعِي، اللَّهُمَّ عَافِني فِي بَصَرِي، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الكُفْرِ وَالفَقْرِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ القَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ. (ثلاث مرات)",
-        "اللَّهُمَّ إِنِّي أَسْأَلُكَ العَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ العَفْوَ وَالعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي، وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي، وَعَنْ يَمِينِي وَعَنْ شِمَالِي، وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أَغْتَالَ مِنْ تَحْتِي. (مرة واحدة)",
-        "اللَّهُمَّ فَاطِرَ السَّمَاوَاتِ وَالْأَرْضِ، عَالِمَ الغَيْبِ وَالشَّهَادَةِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي وَشَرِّ الشَّيْطَانِ وَشِرْكِهِ (وأن أقترف على نفسي سوءاً، أو أجره إلى مسلم). (مرة واحدة)",
-        "اللَّهُمَّ أَنْتَ رَبِّي، لَا إِلَهَ إِلَّا أَنْتَ، خَلقتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي، فَاغْفِرْ لِي؛ فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ. (مرة واحدة)"
-    ];
-
-    // دالة لاختصار النص الطويل جداً للواجهة فقط
-    function getShortDisplayText(fullText) {
-        // إذا كان النص طويلاً جداً (أكثر من 100 حرف) نقوم باختصاره مع الحفاظ على المعنى
-        if (fullText.length > 100) {
-            // إزالة الأقواس الكبيرة والمكررة لتبدو مختصرة
-            let shortText = fullText.substring(0, 85);
-            // نتأكد من أننا نقطع في مكان مناسب
-            const lastSpace = shortText.lastIndexOf(' ');
-            if (lastSpace > 50) {
-                shortText = shortText.substring(0, lastSpace);
-            }
-            return shortText + "....";
-        }
-        return fullText;
-    }
-
-    const DEFAULT_SABAH = FULL_SABAH_TEXTS.map((text, index) => ({ 
-        id: `def_s_${index+1}`, 
-        text: text, 
-        count: [1,3,3,3,1,100,3,3,7,1,1,1,4,1,1,3,1,1,1,1][index], 
-        isDefault: true,
-        fullText: text
-    }));
-
-    const DEFAULT_MASAA = FULL_MASAA_TEXTS.map((text, index) => ({ 
-        id: `def_m_${index+1}`, 
-        text: text, 
-        count: [1,3,3,3,1,100,3,3,3,7,1,1,1,4,1,1,3,1,1,1][index], 
-        isDefault: true,
-        fullText: text
-    }));
-
-    let sabahZekrs = [];
-    let masaaZekrs = [];
-    let currentCategory = "sabah";
-    let selectedIndices = new Set();
-    let editingIndex = null;
-
-    const previewArea = document.getElementById("previewArea");
-    const btnSabah = document.getElementById("btnSabah");
-    const btnMasaa = document.getElementById("btnMasaa");
-    const sendBtn = document.getElementById("sendWhatsAppBtn");
-    const addZekrBtn = document.getElementById("addZekrBtn");
-    const newZekrText = document.getElementById("newZekrText");
-    const newCount = document.getElementById("newCount");
-    const newCategory = document.getElementById("newCategory");
-    const statusDiv = document.getElementById("saveStatus");
-
-    const editModal = document.getElementById("editModal");
-    const editZekrText = document.getElementById("editZekrText");
-    const editCount = document.getElementById("editCount");
-    const saveEditBtn = document.getElementById("saveEditBtn");
-    const cancelEditBtn = document.getElementById("cancelEditBtn");
-
-    function loadDefaultZekrs() {
-        const savedEdits = JSON.parse(localStorage.getItem("local_azkar_edits") || "{}");
-
-        sabahZekrs = DEFAULT_SABAH.map(z => {
-            const copy = { ...z };
-            if (savedEdits[copy.id]) {
-                copy.text = savedEdits[copy.id].text;
-                copy.count = savedEdits[copy.id].count;
-                copy.fullText = copy.text;
-            }
-            return copy;
-        });
-
-        masaaZekrs = DEFAULT_MASAA.map(z => {
-            const copy = { ...z };
-            if (savedEdits[copy.id]) {
-                copy.text = savedEdits[copy.id].text;
-                copy.count = savedEdits[copy.id].count;
-                copy.fullText = copy.text;
-            }
-            return copy;
-        });
-    }
-
-    async function loadFromSupabase() {
-        try {
-            loadDefaultZekrs();
-
-            const { data, error } = await _supabase
-                .from('my_azkar')
-                .select('id, text, count, category');
-
-            if (error) throw error;
-
-            if (data && data.length > 0) {
-                data.forEach(item => {
-                    const zekrObj = { 
-                        text: item.text, 
-                        count: parseInt(item.count), 
-                        isDefault: false,
-                        id: item.id,
-                        category: item.category,
-                        fullText: item.text
-                    };
-                    if (item.category === "sabah") {
-                        sabahZekrs.push(zekrObj);
-                    } else if (item.category === "masaa") {
-                        masaaZekrs.push(zekrObj);
-                    } else if (item.category === "both") {
-                        sabahZekrs.push(JSON.parse(JSON.stringify(zekrObj)));
-                        masaaZekrs.push(JSON.parse(JSON.stringify(zekrObj)));
-                    }
-                });
-            }
-            
-            renderCurrentZekrs();
-        } catch (err) {
-            console.error("Error loading data from Supabase:", err);
-            loadDefaultZekrs();
-            renderCurrentZekrs();
-        }
-    }
-
-    function showStatus(message, isSuccess) {
-        if (statusDiv) {
-            statusDiv.innerHTML = message;
-            statusDiv.style.background = isSuccess ? "#d4edda" : "#f8d7da";
-            statusDiv.style.color = isSuccess ? "#155724" : "#721c24";
-            setTimeout(() => {
-                statusDiv.innerHTML = "☁️ يتم حفظ ومزامنة الأذكار مباشرة في قاعدة البيانات السحابية";
-                statusDiv.style.background = "#d9edf7";
-                statusDiv.style.color = "#31708f";
-            }, 3000);
-        }
-    }
-
-    function updateButtonsStyle() {
-        if (currentCategory === "sabah") {
-            btnSabah.classList.remove("sabah-inactive", "masaa-active", "masaa-inactive");
-            btnSabah.classList.add("sabah-active");
-            btnMasaa.classList.remove("masaa-active", "sabah-active");
-            btnMasaa.classList.add("masaa-inactive");
-        } else {
-            btnMasaa.classList.remove("masaa-inactive", "sabah-active", "sabah-inactive");
-            btnMasaa.classList.add("masaa-active");
-            btnSabah.classList.remove("sabah-active", "masaa-active");
-            btnSabah.classList.add("sabah-inactive");
-        }
-    }
-
-    function escapeHtml(str) {
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-
-    async function deleteZekr(index) {
-        const zekrsArray = (currentCategory === "sabah") ? sabahZekrs : masaaZekrs;
-        const zekr = zekrsArray[index];
-        
-        if (zekr.isDefault) {
-            alert("⚠️ لا يمكن حذف الأذكار الافتراضية الأساسية.");
-            return;
-        }
-        
-        if (!confirm("🗑️ هل أنت متأكد من حذف هذا الذكر نهائياً من السحاب والجهاز؟")) return;
-        
-        try {
-            showStatus("⏳ جاري الحذف من السحاب...", true);
-            
-            const { error } = await _supabase
-                .from('my_azkar')
-                .delete()
-                .eq('id', zekr.id);
-            
-            if (error) throw error;
-            
-            if (zekr.category === "both") {
-                sabahZekrs = sabahZekrs.filter(z => z.id !== zekr.id);
-                masaaZekrs = masaaZekrs.filter(z => z.id !== zekr.id);
-            } else {
-                zekrsArray.splice(index, 1);
-            }
-            
-            selectedIndices.clear();
-            renderCurrentZekrs();
-            showStatus("✅ تم حذف الذكر بنجاح من السحاب", true);
-            
-        } catch (err) {
-            console.error("Error deleting from Supabase:", err);
-            showStatus("❌ فشل الحذف من السحاب", false);
-            alert("⚠️ حدث خطأ أثناء محاولة حذف الذكر من قاعدة البيانات.");
-        }
-    }
-
-    function openEditModal(index) {
-        const zekrsArray = (currentCategory === "sabah") ? sabahZekrs : masaaZekrs;
-        const zekr = zekrsArray[index];
-        editingIndex = index;
-        // في نافذة التعديل يظهر النص الكامل
-        editZekrText.value = zekr.fullText || zekr.text;
-        editCount.value = zekr.count;
-        editModal.style.display = "flex";
-    }
-
-    function closeEditModal() {
-        editModal.style.display = "none";
-        editingIndex = null;
-    }
-
-    async function saveZekrEdit() {
-        if (editingIndex === null) return;
-        
-        const zekrsArray = (currentCategory === "sabah") ? sabahZekrs : masaaZekrs;
-        const zekr = zekrsArray[editingIndex];
-        const updatedText = editZekrText.value.trim();
-        let updatedCount = parseInt(editCount.value);
-
-        if (updatedText === "") {
-            alert("يرجى كتابة نص الذكر");
-            return;
-        }
-        if (isNaN(updatedCount) || updatedCount < 1) updatedCount = 1;
-
-        if (zekr.isDefault) {
-            const savedEdits = JSON.parse(localStorage.getItem("local_azkar_edits") || "{}");
-            savedEdits[zekr.id] = { text: updatedText, count: updatedCount };
-            localStorage.setItem("local_azkar_edits", JSON.stringify(savedEdits));
-
-            zekr.text = updatedText;
-            zekr.count = updatedCount;
-            zekr.fullText = updatedText;
-            
-            closeEditModal();
-            renderCurrentZekrs();
-            showStatus("✏️ تم حفظ تعديل الذكر الافتراضي محلياً بنجاح", true);
-        } else {
-            try {
-                showStatus("⏳ جاري تحديث الذكر سحابياً...", true);
-                
-                const { error } = await _supabase
-                    .from('my_azkar')
-                    .update({ text: updatedText, count: updatedCount })
-                    .eq('id', zekr.id);
-                
-                if (error) throw error;
-                
-                if (zekr.category === "both") {
-                    [sabahZekrs, masaaZekrs].forEach(arr => {
-                        const target = arr.find(z => z.id === zekr.id);
-                        if (target) {
-                            target.text = updatedText;
-                            target.count = updatedCount;
-                            target.fullText = updatedText;
-                        }
-                    });
-                } else {
-                    zekr.text = updatedText;
-                    zekr.count = updatedCount;
-                    zekr.fullText = updatedText;
-                }
-                
-                closeEditModal();
-                renderCurrentZekrs();
-                showStatus("✅ تم تحديث وتعديل البيانات سحابياً بنجاح", true);
-            } catch (err) {
-                console.error("Error updating Supabase:", err);
-                showStatus("❌ فشل تحديث البيانات سحابياً", false);
-                alert("⚠️ واجهتنا مشكلة أثناء تعديل الذكر سحابياً.");
-            }
-        }
-    }
-
-    function renderCurrentZekrs() {
-        const zekrsArray = (currentCategory === "sabah") ? sabahZekrs : masaaZekrs;
-        selectedIndices.clear();
-        let html = `<div style="margin-bottom: 8px; font-size:0.8rem; color:#6f4e2e;">☑️ اختر ما تريد (اضغط على المربع) :</div>`;
-        
-        zekrsArray.forEach((zekr, idx) => {
-            // للعرض نستخدم النص المختصر إذا كان النص طويلاً
-            const displayText = (zekr.isDefault && zekr.fullText && zekr.fullText.length > 100) 
-                ? getShortDisplayText(zekr.fullText) 
-                : (zekr.text.length > 100 ? getShortDisplayText(zekr.text) : zekr.text);
-            
-            const deleteButton = !zekr.isDefault ? 
-                `<button class="delete-btn" data-delete-idx="${idx}">🗑️ حذف</button>` : '';
-            
-            const editButton = `<button class="edit-btn" data-edit-idx="${idx}">✏️ تعديل</button>`;
-            
-            html += `
-                <div class="zekr-item" data-idx="${idx}">
-                    <input type="checkbox" class="check-box" data-idx="${idx}" id="chk_${idx}">
-                    <div class="zekr-text">🔹 ${escapeHtml(displayText)}</div>
-                    <div class="zekr-count">🔄 ${zekr.count} مرة</div>
-                    ${editButton}
-                    ${deleteButton}
+    <!-- Modal للإضافة والتعديل -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">إضافة ذكر جديد</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="azkarForm" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label>نص الذكر:</label>
+                    <textarea id="azkarText" rows="4" required placeholder="أدخل نص الذكر هنا..."></textarea>
                 </div>
-            `;
-        });
-        
-        previewArea.innerHTML = html;
-        
-        document.querySelectorAll('.check-box').forEach(cb => {
-            cb.addEventListener('change', (e) => {
-                const idx = parseInt(e.target.getAttribute('data-idx'));
-                if (e.target.checked) selectedIndices.add(idx);
-                else selectedIndices.delete(idx);
-            });
-        });
-        
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const idx = parseInt(btn.getAttribute('data-delete-idx'));
-                deleteZekr(idx);
-            });
+                <div class="form-group">
+                    <label>عدد المرات:</label>
+                    <input type="number" id="azkarCount" min="1" value="1" required>
+                </div>
+                <div class="form-group">
+                    <label>المصدر / المعلومات:</label>
+                    <input type="text" id="azkarSource" placeholder="مثال: رواه البخاري">
+                </div>
+                <button type="submit" class="submit-btn" id="formSubmitBtn">حفظ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- عنصر التنبيه -->
+    <div id="toast" class="toast">تمت العملية بنجاح</div>
+
+    <script>
+        const defaultAzkar = {
+            morning: [
+                { id: 1, text: "آية الكرسي: اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ...", count: 1, source: "سورة البقرة - آية 255", custom: true }, // custom: true لتسهيل الحذف في البداية
+                { id: 2, text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ...", count: 1, source: "مسلم", custom: true },
+                { id: 3, text: "اللَّهُمَّ بِكَ أَصْبَحْنَا وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ.", count: 1, source: "الترمذي", custom: true },
+                { id: 4, text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", count: 100, source: "متفق عليه", custom: true },
+                { id: 5, text: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", count: 100, source: "متفق عليه", custom: true }
+            ],
+            evening: [
+                { id: 6, text: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ...", count: 1, source: "مسلم", custom: true },
+                { id: 7, text: "اللَّهُمَّ بِكَ أَمْسَيْنَا وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا وَبِكَ نَمُوتُ وَإِلَيْكَ الْمَصِيرُ.", count: 1, source: "الترمذي", custom: true },
+                { id: 8, text: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ.", count: 3, source: "أحمد وابن ماجه", custom: true },
+                { id: 9, text: "آية الكرسي", count: 1, source: "سورة البقرة", custom: true },
+                { id: 10, text: "اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ، وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ، وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ...", count: 4, source: "أبو داود والترمذي", custom: true }
+            ]
+        };
+
+        let currentTab = 'morning';
+        let azkarData = {};
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            renderAzkar();
+            updateTheme();
         });
 
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const idx = parseInt(btn.getAttribute('data-edit-idx'));
-                openEditModal(idx);
-            });
-        });
-    }
-
-    function sendToWhatsApp() {
-        const zekrsArray = (currentCategory === "sabah") ? sabahZekrs : masaaZekrs;
-        const selectedArray = Array.from(selectedIndices).sort((a,b)=>a-b);
-        if (selectedArray.length === 0) {
-            alert("⚠️ الرجاء اختيار ذكر واحد على الأقل قبل الإرسال.");
-            return;
-        }
-        let message = `📿 *أذكار ${currentCategory === "sabah" ? "الصباح" : "المساء"}* 📿\n\n`;
-        for (let idx of selectedArray) {
-            const z = zekrsArray[idx];
-            // عند الإرسال نرسل النص الكامل
-            const fullTextToSend = z.fullText || z.text;
-            message += `🔹 ${fullTextToSend}\n📖 (${z.count} مرة)\n\n`;
-        }
-        message += `— {ألا بذكر الله تطمئن القلوب} —`;
-        const encodedMsg = encodeURIComponent(message);
-        const whatsappUrl = `https://wa.me/?text=${encodedMsg}`;
-        window.open(whatsappUrl, '_blank');
-    }
-
-    async function addNewZekr() {
-        let text = newZekrText.value.trim();
-        if (text === "") {
-            alert("يرجى كتابة نص الذكر");
-            return;
-        }
-        let countVal = parseInt(newCount.value);
-        if (isNaN(countVal) || countVal < 1) countVal = 1;
-        const category = newCategory.value;
-        
-        try {
-            showStatus("⏳ جاري المزامنة والحفظ سحابياً...", true);
-            
-            const { data, error } = await _supabase
-                .from('my_azkar')
-                .insert([
-                    { text: text, count: countVal, category: category }
-                ])
-                .select();
-            
-            if (error) throw error;
-            
-            const newZekr = { 
-                text: text, 
-                count: countVal, 
-                isDefault: false,
-                id: data[0].id,
-                category: category,
-                fullText: text
-            };
-            
-            if (category === "sabah") {
-                sabahZekrs.push(newZekr);
-                if (currentCategory === "sabah") renderCurrentZekrs();
-            } else if (category === "masaa") {
-                masaaZekrs.push(newZekr);
-                if (currentCategory === "masaa") renderCurrentZekrs();
-            } else if (category === "both") {
-                sabahZekrs.push(JSON.parse(JSON.stringify(newZekr)));
-                masaaZekrs.push(JSON.parse(JSON.stringify(newZekr)));
-                renderCurrentZekrs();
+        function loadData() {
+            const savedData = localStorage.getItem('myAzkarApp');
+            if (savedData) {
+                azkarData = JSON.parse(savedData);
+            } else {
+                azkarData = JSON.parse(JSON.stringify(defaultAzkar));
             }
-            
-            newZekrText.value = "";
-            newCount.value = "1";
-            showStatus("✅ تم الحفظ والمزامنة السحابية بنجاح", true);
-            alert("✅ تمت إضافة الذكر وحفظه سحابياً بنجاح");
-
-        } catch (err) {
-            console.error("Error saving to Supabase:", err);
-            showStatus("❌ فشل الحفظ السحابي", false);
-            alert("⚠️ واجهتنا مشكلة أثناء المزامنة السحابية.");
         }
-    }
 
-    btnSabah.addEventListener("click", () => {
-        currentCategory = "sabah";
-        updateButtonsStyle();
-        renderCurrentZekrs();
-    });
-    btnMasaa.addEventListener("click", () => {
-        currentCategory = "masaa";
-        updateButtonsStyle();
-        renderCurrentZekrs();
-    });
-    sendBtn.addEventListener("click", sendToWhatsApp);
-    addZekrBtn.addEventListener("click", addNewZekr);
-    
-    saveEditBtn.addEventListener("click", saveZekrEdit);
-    cancelEditBtn.addEventListener("click", closeEditModal);
+        function saveData() {
+            localStorage.setItem('myAzkarApp', JSON.stringify(azkarData));
+        }
 
-    updateButtonsStyle();
-    loadFromSupabase();
-</script>
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            if (tab === 'morning') {
+                document.querySelector('.tab-btn:first-child').classList.add('active');
+            } else {
+                document.querySelector('.tab-btn:last-child').classList.add('active');
+            }
+            updateTheme();
+            renderAzkar();
+        }
+
+        function updateTheme() {
+            const body = document.body;
+            if (currentTab === 'evening') {
+                body.classList.add('night-mode');
+            } else {
+                body.classList.remove('night-mode');
+            }
+        }
+
+        function renderAzkar() {
+            const container = document.getElementById('azkar-list');
+            container.innerHTML = '';
+            
+            const list = azkarData[currentTab];
+            
+            list.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'azkar-card';
+                if (item.current >= item.count) {
+                    card.classList.add('completed');
+                }
+
+                // أزرار التعديل والحذف
+                const actionButtons = `
+                    <div class="card-actions">
+                        <button class="icon-btn edit-btn" onclick="openEditModal(${item.id})" title="تعديل">✎</button>
+                        <button class="icon-btn delete-btn" onclick="deleteAzkar(${item.id})" title="حذف">🗑️</button>
+                    </div>
+                `;
+
+                card.innerHTML = `
+                    ${actionButtons}
+                    <div class="checkbox-area">
+                        <input type="checkbox" onchange="toggleSelection(${item.id})" id="chk-${item.id}">
+                    </div>
+                    <div class="azkar-text">${item.text}</div>
+                    <div class="azkar-footer">
+                        <div class="meta-info">
+                            ${item.source ? item.source : ''}
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="counter-display">${item.current} / ${item.count}</span>
+                            <button class="counter-btn" onclick="incrementCounter(${item.id})">✓</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function incrementCounter(id) {
+            const list = azkarData[currentTab];
+            const item = list.find(x => x.id === id);
+            if (item && item.current < item.count) {
+                item.current++;
+                saveData();
+                renderAzkar();
+                if (item.current === item.count) {
+                    showToast("أكملت هذا الذكر، جزاك الله خيراً");
+                }
+            }
+        }
+
+        // --- إدارة المودال (إضافة وتعديل) ---
+        function openModal() {
+            // إعادة تعيين النموذج للإضافة
+            document.getElementById('azkarForm').reset();
+            document.getElementById('editId').value = "";
+            document.getElementById('modalTitle').innerText = "إضافة ذكر جديد";
+            document.getElementById('formSubmitBtn').innerText = "حفظ";
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function openEditModal(id) {
+            const list = azkarData[currentTab];
+            const item = list.find(x => x.id === id);
+            if(item) {
+                document.getElementById('editId').value = item.id;
+                document.getElementById('azkarText').value = item.text;
+                document.getElementById('azkarCount').value = item.count;
+                document.getElementById('azkarSource').value = item.source;
+                
+                document.getElementById('modalTitle').innerText = "تعديل الذكر";
+                document.getElementById('formSubmitBtn').innerText = "تحديث";
+                document.getElementById('modal').style.display = 'flex';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const editId = document.getElementById('editId').value;
+            const text = document.getElementById('azkarText').value;
+            const count = parseInt(document.getElementById('azkarCount').value);
+            const source = document.getElementById('azkarSource').value;
+
+            if (editId) {
+                // وضع التعديل
+                const list = azkarData[currentTab];
+                const index = list.findIndex(x => x.id == editId);
+                if (index !== -1) {
+                    list[index].text = text;
+                    list[index].count = count;
+                    list[index].source = source;
+                    // إعادة تعيين التقدم إذا تغير العداد
+                    if(list[index].current > count) list[index].current = 0;
+                    showToast("تم تعديل الذكر بنجاح");
+                }
+            } else {
+                // وضع الإضافة
+                const newId = Date.now();
+                const newDhikr = {
+                    id: newId,
+                    text: text,
+                    count: count,
+                    source: source,
+                    custom: true,
+                    current: 0
+                };
+                azkarData[currentTab].push(newDhikr);
+                showToast("تمت إضافة الذكر بنجاح");
+            }
+
+            saveData();
+            renderAzkar();
+            closeModal();
+        }
+
+        function deleteAzkar(id) {
+            if(confirm("هل أنت متأكد من حذف هذا الذكر؟")) {
+                azkarData[currentTab] = azkarData[currentTab].filter(item => item.id !== id);
+                saveData();
+                renderAzkar();
+                showToast("تم حذف الذكر");
+            }
+        }
+
+        // --- المشاركة ---
+        function toggleSelection(id) {
+            // فقط لتفعيل المربع
+        }
+
+        function shareSelected() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            
+            if (checkboxes.length === 0) {
+                showToast("الرجاء تحديد الأذكار التي تريد مشاركتها أولاً");
+                return;
+            }
+
+            let message = `🌿 *أذكار ${currentTab === 'morning' ? 'الصباح' : 'المساء'}*\n\n`;
+            
+            checkboxes.forEach(chk => {
+                const id = parseInt(chk.id.split('-')[1]);
+                const item = azkarData[currentTab].find(x => x.id === id);
+                if (item) {
+                    // إضافة النص
+                    message += `▫️ ${item.text}\n`;
+                    // إضافة عدد المرات كطلب من المستخدم
+                    message += `[التكرار: ${item.count}]`;
+                    
+                    if(item.source) message += ` _(${item.source})_`;
+                    message += `\n\n`;
+                }
+            });
+
+            const encodedMsg = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/?text=${encodedMsg}`;
+            
+            window.open(whatsappUrl, '_blank');
+            checkboxes.forEach(c => c.checked = false);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.innerText = message;
+            toast.className = "toast show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
 </body>
 </html>
